@@ -4,12 +4,15 @@ const margin = {top: 20, bottom: 20, left: 30, right: 30},
 height =500-margin.top-margin.bottom,
 width=500-margin.left-margin.right;
 
+// Container for each second of cooking time
+var data = [];
 
-var data = [],
-i = 0;
+// Cooking time in seconds
+var cTime = 20;
 
-for(i=0; i<5; i++){
-    data.push(Math.round(Math.random()*100));
+for(var i=0; i<cTime; i++) {
+    // Push a value [0,1] for color interpolation
+    data.push(i/cTime);
 }
 
 var arc = d3.arc()
@@ -23,14 +26,18 @@ var pie = d3.pie()
     return d;
   });
 
+var color = d3.scaleLinear()
+    .range(d3.interpolateRdBu())
+    .domain([0,1]);
 
+console.log(d3.interpolateRdBu(0.5));
 
 var svg = d3.select("#pChart")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
-    .attr("transform", "translate(" + (width/2 +margin.right) + "," + (height/2) + ")");
+    .attr("transform", "translate(" + (width/2 +margin.right+margin.left) + "," + (height/2) + ")");
 
 
 
@@ -40,7 +47,8 @@ svg.selectAll(".arc")
   .append("path")
   .attr("class", "arc")
   .style("fill", function(d) {
-    return "red";
+
+    return d3.interpolateRdBu(1-d.data);
   })
   .attr("d", arc);
 
