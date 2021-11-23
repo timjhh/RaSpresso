@@ -8,36 +8,33 @@ width=500-margin.left-margin.right;
 var data = [];
 
 // Cooking time in seconds
-var cTime = 20;
+var cTime = 100;
 
 for(var i=0; i<cTime; i++) {
     // Push a value [0,1] for color interpolation
-    data.push(i/cTime);
+    data.push({
+       length : 1/cTime,
+       color: i/cTime
+    });
 }
 
 var arc = d3.arc()
   .innerRadius(80)
   .outerRadius(100)
-  .cornerRadius(20);
+  .cornerRadius(0);
 
 var pie = d3.pie()
   .sort(null)
   .value(function(d) {
-    return d;
+    return d.length;
   });
-
-var color = d3.scaleLinear()
-    .range(d3.interpolateRdBu())
-    .domain([0,1]);
-
-console.log(d3.interpolateRdBu(0.5));
 
 var svg = d3.select("#pChart")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
-    .attr("transform", "translate(" + (width/2 +margin.right+margin.left) + "," + (height/2) + ")");
+    .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")");
 
 
 
@@ -46,14 +43,13 @@ svg.selectAll(".arc")
   .enter()
   .append("path")
   .attr("class", "arc")
-  .style("fill", function(d) {
-
-    return d3.interpolateRdBu(1-d.data);
-  })
+  .style("fill", d => d3.interpolateRdBu(1-d.data.color))
   .attr("d", arc);
 
-
-
+svg.append("text")
+.attr("font-weight", "bold")
+.attr("dx", -(margin.left+margin.right))
+.text("Cooking Time");
 
 
 });
