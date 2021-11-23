@@ -1,8 +1,11 @@
-$(document).ready(function {
+$(document).ready(function() {
 
+var dataset = [1,2,3];
 
+var svg = d3.select("#pChart")
+    .append("svg");
 
-sampleSVG.selectAll("circle")
+svg.selectAll("circle")
     .data(dataset)
     .enter().append("circle")
     .style("stroke", "gray")
