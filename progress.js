@@ -36,7 +36,13 @@ var svg = d3.select("#pChart")
     .append("g")
     .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")");
 
-
+function arcTween(a) {
+  var i = () => d3.interpolate(this._current, a);
+  this._current = i(0);
+  return function(t) {
+  return arc(i(t));
+  };
+}
 
 svg.selectAll(".arc")
   .data(pie(data))
@@ -44,7 +50,15 @@ svg.selectAll(".arc")
   .append("path")
   .attr("class", "arc")
   .style("fill", d => d3.interpolateRdBu(1-d.data.color))
-  .attr("d", arc);
+  .attr("d", arc)
+  .each(d => this._current = d.length);
+
+svg.selectAll("path")
+.data(pie(data))
+.transition()
+.attrTween("d", arcTween);
+
+    
 
 svg.append("text")
 .attr("font-weight", "bold")
