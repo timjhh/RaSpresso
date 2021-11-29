@@ -8,9 +8,21 @@ width=(window.innerWidth/2)-margin.left-margin.right;
 // Cooking time in seconds
 var cTime = 100;
 
+// Timer, counter for data
+var counter = 0;
+
 // Container for each second of cooking time
 var data = [{ length: 1/cTime, color: 0 }];
 
+
+// General purpose code for filling in pie
+// for(var i=0; i<cTime; i++) {
+//     // Push a value [0,1] for color interpolation
+//     data.push({
+//        length : 1/cTime,
+//        color: i/cTime
+//     });
+// }
 
 
 var arc = d3.arc()
@@ -29,7 +41,8 @@ var svg = d3.select("#pChart")
     .attr("width", width)
     .attr("height", height)
     .attr("id", "pie")
-    .attr("opacity", 0)
+    //.attr("opacity", 0) // CHANGE HERE FOR FADE-IN EFFECT
+    .attr("opacity", 1)
     .append("g")
     .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")");
 
@@ -59,8 +72,15 @@ svg.selectAll(".arc")
 
 svg.append("text")
 .attr("font-weight", "bold")
-.attr("dx", -(margin.left+margin.right-5))
+.attr("dx", -(margin.left+margin.right-(Math.PI)))
 .text("Cooking Time");
+
+svg.append("text")
+.attr("font-weight", "bold")
+.attr("id", "time")
+.attr("dx", -Math.PI)
+.attr("dy", 20)
+.text(counter);
 
 d3.select("#stBtn")
 .on("click", () => {
@@ -70,6 +90,58 @@ d3.select("#stBtn")
   .attr("opacity", 1);
 });
 
+
+function animate() {
+
+// Repeat until timer is reached
+if(counter >= cTime) timer.stop();
+
+// General purpose code for filling in pie
+// for(var i=0; i<cTime; i++) {
+//     // Push a value [0,1] for color interpolation
+//     data.push({
+//        length : 1/cTime,
+//        color: i/cTime
+//     });
+// }
+
+data.push({ length: 1/cTime, color: counter/cTime });
+
+svg.selectAll("text")
+.remove();
+
+svg.selectAll("path")
+.remove();
+
+svg.selectAll(".arc")
+  .data(pie(data))
+  .enter()
+  .append("path")
+  .attr("class", "arc")
+  .style("fill", d => d3.interpolateRdBu(1-d.data.color))
+  .attr("d", arc)
+  .each(d => this._current = d.length);
+
+
+svg.append("text")
+.attr("font-weight", "bold")
+.attr("dx", -(margin.left+margin.right-(Math.PI)))
+.text("Cooking Time");
+
+svg.append("text")
+.attr("font-weight", "bold")
+.attr("id", "time")
+.attr("dx", -Math.PI)
+.attr("dy", 20)
+.text(counter);
+
+
+counter++;
+
+
+}
+
+var timer = d3.interval(animate, 1000);
 
 });
 
