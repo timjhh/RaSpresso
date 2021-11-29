@@ -88,6 +88,7 @@ d3.select("#stBtn")
   .transition()
   .duration(500)
   .attr("opacity", 1);
+  var timer = d3.interval(animate, 1000);
 });
 
 
@@ -131,7 +132,7 @@ svg.append("text")
 svg.append("text")
 .attr("font-weight", "bold")
 .attr("id", "time")
-.attr("dx", -Math.PI)
+.attr("dx", -(Math.PI*(counter.toString().length)))
 .attr("dy", 20)
 .text(counter);
 
@@ -141,7 +142,8 @@ counter++;
 
 }
 
-var timer = d3.interval(animate, 1000);
+// UN-COMMENT TO START TIMER AUTOMATICALLY
+// var timer = d3.interval(animate, 1000);
 
 });
 
