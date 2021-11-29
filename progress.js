@@ -1,22 +1,17 @@
 $(document).ready(function() {
 
 const margin = {top: 20, bottom: 20, left: 30, right: 30},
-height =500-margin.top-margin.bottom,
-width=500-margin.left-margin.right;
+height=(window.innerHeight/2)-margin.top-margin.bottom,
+width=(window.innerWidth/2)-margin.left-margin.right;
 
-// Container for each second of cooking time
-var data = [];
 
 // Cooking time in seconds
 var cTime = 100;
 
-for(var i=0; i<cTime; i++) {
-    // Push a value [0,1] for color interpolation
-    data.push({
-       length : 1/cTime,
-       color: i/cTime
-    });
-}
+// Container for each second of cooking time
+var data = [{ length: 1/cTime, color: 0 }];
+
+
 
 var arc = d3.arc()
   .innerRadius(80)
@@ -33,6 +28,8 @@ var svg = d3.select("#pChart")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
+    .attr("id", "pie")
+    .attr("opacity", 0)
     .append("g")
     .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")");
 
@@ -53,17 +50,25 @@ svg.selectAll(".arc")
   .attr("d", arc)
   .each(d => this._current = d.length);
 
-svg.selectAll("path")
-.data(pie(data))
-.transition()
-.attrTween("d", arcTween);
+// svg.selectAll("path")
+// .data(pie(data))
+// .transition()
+// .attrTween("d", arcTween);
 
     
 
 svg.append("text")
 .attr("font-weight", "bold")
-.attr("dx", -(margin.left+margin.right))
+.attr("dx", -(margin.left+margin.right-5))
 .text("Cooking Time");
+
+d3.select("#stBtn")
+.on("click", () => {
+  d3.select("#pie")
+  .transition()
+  .duration(500)
+  .attr("opacity", 1);
+});
 
 
 });
