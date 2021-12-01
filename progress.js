@@ -6,13 +6,13 @@ width=(window.innerWidth/2)-margin.left-margin.right;
 
 
 // Cooking time in seconds
-var cTime = 100;
+var cTime = 10;
 
 // Timer, counter for data
 var counter = 0;
 
 // Container for each second of cooking time
-var data = [{ length: 1/cTime, color: 0 }];
+var data = [];
 
 
 // General purpose code for filling in pie
@@ -23,12 +23,15 @@ var data = [{ length: 1/cTime, color: 0 }];
 //        color: i/cTime
 //     });
 // }
+var cMax = Math.PI*2;
 
 
 var arc = d3.arc()
   .innerRadius(80)
   .outerRadius(100)
-  .cornerRadius(0);
+  .cornerRadius(0)
+  .startAngle(d => ((counter-1)/cTime)*cMax)
+  .endAngle(d => (((counter)/cTime)*cMax));
 
 var pie = d3.pie()
   .sort(null)
@@ -41,7 +44,6 @@ var svg = d3.select("#pChart")
     .attr("width", width)
     .attr("height", height)
     .attr("id", "pie")
-    //.attr("opacity", 0) // CHANGE HERE FOR FADE-IN EFFECT
     .attr("opacity", 1)
     .append("g")
     .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")");
@@ -60,7 +62,7 @@ svg.selectAll(".arc")
   .append("path")
   .attr("class", "arc")
   .style("fill", d => d3.interpolateRdBu(1-d.data.color))
-  .attr("d", arc)
+  .attr("d", (d,idx) => arc(idx))
   .each(d => this._current = d.length);
 
 // svg.selectAll("path")
@@ -88,14 +90,15 @@ d3.select("#stBtn")
   .transition()
   .duration(500)
   .attr("opacity", 1);
-  var timer = d3.interval(animate, 1000);
+  counter++;
+  var timer = d3.interval(animate, 1000, 0);
 });
 
 
 function animate() {
 
 // Repeat until timer is reached
-if(counter >= cTime) timer.stop();
+if(counter > cTime) timer.stop();
 
 // General purpose code for filling in pie
 // for(var i=0; i<cTime; i++) {
@@ -111,8 +114,8 @@ data.push({ length: 1/cTime, color: counter/cTime });
 svg.selectAll("text")
 .remove();
 
-svg.selectAll("path")
-.remove();
+// svg.selectAll("path")
+// .remove();
 
 svg.selectAll(".arc")
   .data(pie(data))
@@ -120,7 +123,12 @@ svg.selectAll(".arc")
   .append("path")
   .attr("class", "arc")
   .style("fill", d => d3.interpolateRdBu(1-d.data.color))
-  .attr("d", arc)
+  .attr("d", (d,idx) => arc(idx))
+    .attr("opacity",0)
+  .transition()
+  .duration(200)
+  .ease(d3.easeLinear)
+  .attr("opacity",1)
   .each(d => this._current = d.length);
 
 
