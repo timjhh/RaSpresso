@@ -6,7 +6,7 @@ width=(window.innerWidth/2)-margin.left-margin.right;
 
 
 // Cooking time in seconds
-var cTime = 10;
+var cTime = 100;
 
 // Timer, counter for data
 var counter = 0;
