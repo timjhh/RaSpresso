@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 
 var stButton = $("#stBtn");
-stButton.click(function()
+stButton.on("click", function()
 {
 	console.log(stButton.text());
 	if (stButton.text() === "Start Cooking")

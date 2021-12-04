@@ -4,6 +4,8 @@ var margin = {top: 20, bottom: 20, left: 30, right: 30},
 height=(window.innerHeight/2)-margin.top-margin.bottom,
 width=(window.innerWidth/2)-margin.left-margin.right;
 
+// Current cooking temp
+var currTemp = 0;
 
 // Cooking time in seconds
 var cTime = 100;
@@ -91,6 +93,10 @@ d3.select("#stBtn")
   .transition()
   .duration(500)
   .attr("opacity", 1);
+
+	get_data();
+  console.log(currTemp);
+
   counter++;
   var timer = d3.interval(animate, 1000, 0);
 });
@@ -153,6 +159,20 @@ counter++;
 
 // UN-COMMENT TO START TIMER AUTOMATICALLY
 // var timer = d3.interval(animate, 1000);
+function get_data() {
+	return $.ajax({
+		url:"/temp",
+		type: "GET",
+		success: function(response) {
+			currTemp = response;
+			return response;
+		}
+
+	})
+
+
+}
+
 
 });
 

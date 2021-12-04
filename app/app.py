@@ -1,6 +1,9 @@
 from flask import *
 import RPi.GPIO as GPIO
 
+
+app = Flask(__name__)
+
 # set gpio mode
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -14,9 +17,6 @@ RING_PIN = 23
 #   RING_PIN sends OUT information to the LED progress ring
 GPIO.setup(TEMP_PIN, GPIO.IN)
 GPIO.setup(RING_PIN, GPIO.OUT)
-
-app = Flask(__name__)
-
 
 # run when start button is pressed
 @app.route('/stBtn', methods=['POST'])
