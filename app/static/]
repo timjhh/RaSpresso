@@ -20,11 +20,8 @@ $(document).ready(function() {
 // What step of the cooking process are we at?
 var step = 0;
 
-var grounds = "https://www.one-copenhagen.com/wp-content/uploads/2019/07/1-1-1024x678.jpg";
-var extraction = "https://cdn.shopify.com/s/files/1/1200/1578/files/blog_Under-Ideal-Over-copy-1024x529.jpg?2171014596988438291";
-var stove = "https://media.istockphoto.com/vectors/gas-camping-stove-color-icon-camping-outdoor-travel-equipment-vector-id1312268285?k=20&m=1312268285&s=612x612&w=0&h=97x0mz80FV-TeEkQ_UlCgLXOk-KmTtWJTbJbvKZudOI="
-	
-	
+var grounds = "https://www.one-copenhagen.com/wp-content/uploads/2019/07/1-1-1024x678.jpg"
+
 var margin = {top: 20, bottom: 20, left: 30, right: 30},
 height=(window.innerHeight/2)-margin.top-margin.bottom,
 width=(window.innerWidth/2)-margin.left-margin.right;
@@ -70,19 +67,6 @@ var pie = d3.pie()
     return d.length;
   });
 
-// Data for presentation
-var ttl = d3.select("#ttl");
-
-var subttl = d3.select("#subttl");
-
-var info = d3.select("#pChart")
-	.append("div")
-	.attr("id", "info")
-	.attr("class", "position-absolute");
-
-var activeImg = info.append("img")
-	.attr("class", "d-flex mx-auto w-75");
-
 var svg = d3.select("#pChart")
     .append("svg")
     .attr("width", width)
@@ -121,10 +105,6 @@ d3.select("#stBtn")
 	stepOne();
 	step++;
 	}
-	else if(step == 1) {
-	stepTwo();
-	step++;
-	}
 	else {
 		
 
@@ -145,29 +125,17 @@ d3.select("#stBtn")
 
 function stepOne() {
 	
+	var info = d3.select("#pChart")
+	.append("div")
+	.attr("class", "position-absolute");
 
-	activeImg.attr("src", grounds);
+	info
+	.append("text")
+	.text("casjdc");
 
-	ttl.text("Grind Your Beans");
-
-	subttl.text("When Brewing Espresso, it is important to grind your beans as uniformly, and small as possible");
-
-
-	d3.select("#stBtn").text("Next Step");
 
 }
-function stepTwo() {
-	
-	activeImg.attr("src", stove);
-	
-	ttl.text("Start The Heater");
 
-	subttl.text("After affixing the gas stove, turn the dial to the left and press the ignition");
-
-
-	d3.select("#stBtn").text("Start Cooking");
-
-}
 
 
 function animate() {

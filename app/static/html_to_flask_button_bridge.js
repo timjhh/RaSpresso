@@ -10,6 +10,7 @@ stButton.on("click", function()
 	{
 	stButton.text("Cooking!");
 	stButton.attr("disabled", true);
+	$("#info").html("");
 		$.ajax({
             url: "/stBtn",
             type: "post",

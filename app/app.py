@@ -36,4 +36,10 @@ def temp():
 
 @app.route('/', methods=['GET'])
 def default():
-    return render_template("index.html")
+    ### TODO Uncomment and send data to webpage if route fails
+    #temp = GPIO.input(/////)
+    #tmpData = {
+    #    'temp': temp
+    #}
+    #return render_template("index.html", **tmpData)
+    return render_template("index.html", **{'temp': 48})
