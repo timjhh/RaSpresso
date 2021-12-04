@@ -19,7 +19,7 @@ app = Flask(__name__)
 
 
 # run when start button is pressed
-@app.route('/stButton', methods=['POST'])
+@app.route('/stBtn', methods=['POST'])
 def cook():
     # let us know we started cooking
     print("Start Button Pressed")

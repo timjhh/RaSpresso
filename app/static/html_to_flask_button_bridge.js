@@ -1,3 +1,7 @@
+
+$(document).ready(function() {
+
+
 var stButton = $("#stBtn");
 stButton.click(function()
 {
@@ -23,3 +27,6 @@ stButton.click(function()
 
 }
 );
+
+
+});
