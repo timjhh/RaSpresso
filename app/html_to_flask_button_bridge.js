@@ -1,11 +1,11 @@
-var stButton = $("#stButton");
+var stButton = $("#stBtn");
 stButton.click(function()
 {
 	console.log(stButton.text());
 	if (stButton.text() === "Start Cooking")
 	{
 		$.ajax({
-            url: "/stButton",
+            url: "/stBtn",
             type: "post",
 	        success: function(response)
 			{

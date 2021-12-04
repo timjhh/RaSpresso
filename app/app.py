@@ -30,6 +30,9 @@ def cook():
     # let us know the process is complete
     return "cook process complete"
 
+@app.route('/temp', methods=['GET'])
+def temp():
+    return 4;
 
 @app.route('/', methods=['GET'])
 def default():
