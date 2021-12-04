@@ -20,6 +20,11 @@ $(document).ready(function() {
 // What step of the cooking process are we at?
 var step = 0;
 
+//var cover = "https://cdn.dribbble.com/users/948184/screenshots/11991534/media/bb0c9bcc70dccbfd4b5dd7595f707dad.gif"
+var cover = "https://cdn.shopify.com/s/files/1/0723/6423/t/27/assets/mocha.gif?v=7428839628543292966"
+
+
+
 var grounds = "https://www.one-copenhagen.com/wp-content/uploads/2019/07/1-1-1024x678.jpg";
 var extraction = "https://cdn.shopify.com/s/files/1/1200/1578/files/blog_Under-Ideal-Over-copy-1024x529.jpg?2171014596988438291";
 var stove = "https://media.istockphoto.com/vectors/gas-camping-stove-color-icon-camping-outdoor-travel-equipment-vector-id1312268285?k=20&m=1312268285&s=612x612&w=0&h=97x0mz80FV-TeEkQ_UlCgLXOk-KmTtWJTbJbvKZudOI="
@@ -81,7 +86,8 @@ var info = d3.select("#pChart")
 	.attr("class", "position-absolute");
 
 var activeImg = info.append("img")
-	.attr("class", "d-flex mx-auto w-75");
+	.attr("class", "d-flex mx-auto w-75 mt-5")
+	.attr("src", cover);
 
 var svg = d3.select("#pChart")
     .append("svg")
@@ -119,13 +125,11 @@ d3.select("#stBtn")
  
 	if(step == 0) {
 	stepOne();
-	step++;
 	}
 	else if(step == 1) {
 	stepTwo();
-	step++;
 	}
-	else {
+	else if(step == 2) {
 		
 
 	d3.select("#pie")
@@ -138,6 +142,7 @@ d3.select("#stBtn")
   		timer = d3.interval(animate, 1000, 0);
 	}
 	}
+	step++;
 });
 
 
@@ -150,7 +155,7 @@ function stepOne() {
 
 	ttl.text("Grind Your Beans");
 
-	subttl.text("When Brewing Espresso, it is important to grind your beans as uniformly, and small as possible");
+	subttl.text("When Brewing Espresso, it is important to grind your beans uniformly to retain their flavor");
 
 
 	d3.select("#stBtn").text("Next Step");
