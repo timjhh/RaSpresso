@@ -25,14 +25,14 @@ def cook():
     print("Start Button Pressed")
 
     # start timer
-    GPIO.output(RING_PIN, HIGH)
+    #GPIO.output(RING_PIN, HIGH)
 
     # let us know the process is complete
     return "cook process complete"
 
 @app.route('/temp', methods=['GET'])
 def temp():
-    return 4;
+    return "4";
 
 @app.route('/', methods=['GET'])
 def default():

@@ -8,6 +8,8 @@ stButton.on("click", function()
 	console.log(stButton.text());
 	if (stButton.text() === "Start Cooking")
 	{
+	stButton.text("Cooking!");
+	stButton.attr("disabled", true);
 		$.ajax({
             url: "/stBtn",
             type: "post",

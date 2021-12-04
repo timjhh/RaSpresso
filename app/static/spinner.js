@@ -1,14 +1,34 @@
+
+
+function get_data() {
+	$.ajax({
+		url:"/temp",
+		type: "GET",
+		success: function(response) {
+			currTemp = parseInt(response); // Set temperature to current
+			return parseInt(response);
+		}
+
+	})
+
+
+}
+
+
 $(document).ready(function() {
 
 var margin = {top: 20, bottom: 20, left: 30, right: 30},
 height=(window.innerHeight/2)-margin.top-margin.bottom,
 width=(window.innerWidth/2)-margin.left-margin.right;
 
+// Callback for timer
+var timer;
+
 // Current cooking temp
 var currTemp = 0;
 
 // Cooking time in seconds
-var cTime = 100;
+var cTime = 120;
 
 // Timer, counter for data
 var counter = 0;
@@ -77,15 +97,16 @@ svg.selectAll(".arc")
 
 svg.append("text")
 .attr("font-weight", "bold")
+.attr("id", "tmp")
 .attr("dx", -(margin.left+margin.right-(Math.PI)))
-.text("Cooking Time");
+.text("Temp: " + currTemp);
 
 svg.append("text")
 .attr("font-weight", "bold")
 .attr("id", "time")
 .attr("dx", -Math.PI)
 .attr("dy", 20)
-.text(counter);
+.text("Time: " + counter);
 
 d3.select("#stBtn")
 .on("click", () => {
@@ -94,18 +115,22 @@ d3.select("#stBtn")
   .duration(500)
   .attr("opacity", 1);
 
-	get_data();
-  console.log(currTemp);
-
-  counter++;
-  var timer = d3.interval(animate, 1000, 0);
+	if(!timer) {
+  		timer = d3.interval(animate, 1000, 0);
+	}
 });
+
+
+
+
+
+
 
 
 function animate() {
 
 // Repeat until timer is reached
-if(counter > cTime) timer.stop();
+if(counter >= cTime) timer.stop();
 
 // General purpose code for filling in pie
 // for(var i=0; i<cTime; i++) {
@@ -139,39 +164,30 @@ svg.selectAll(".arc")
   .each(d => this._current = d.length);
 
 
+console.log(get_data());
+
 svg.append("text")
 .attr("font-weight", "bold")
+.attr("id", "tmp")
 .attr("dx", -(margin.left+margin.right-(Math.PI)))
-.text("Cooking Time");
+.text("Temp: " + (get_data() ? get_data() : 0));
 
 svg.append("text")
 .attr("font-weight", "bold")
 .attr("id", "time")
-.attr("dx", -(Math.PI*(counter.toString().length)))
+.attr("dx", -Math.PI)
 .attr("dy", 20)
-.text(counter);
+.text("Time: " + counter);
 
 
 counter++;
+
 
 
 }
 
 // UN-COMMENT TO START TIMER AUTOMATICALLY
 // var timer = d3.interval(animate, 1000);
-function get_data() {
-	return $.ajax({
-		url:"/temp",
-		type: "GET",
-		success: function(response) {
-			currTemp = response;
-			return response;
-		}
-
-	})
-
-
-}
 
 
 });
