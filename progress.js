@@ -3,6 +3,7 @@ $(document).ready(function() {
 const margin = {top: 20, bottom: 20, left: 30, right: 30},
 height=(window.innerHeight/2)-margin.top-margin.bottom,
 width=(window.innerWidth/2)-margin.left-margin.right;
+width=(window.innerWidth/2)-margin.left-margin.right;
 
 
 // Cooking time in seconds
@@ -14,6 +15,7 @@ var counter = 0;
 // Container for each second of cooking time
 var data = [];
 
+// Temperature from temperature sensor
 
 // General purpose code for filling in pie
 // for(var i=0; i<cTime; i++) {

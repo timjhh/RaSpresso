@@ -1,32 +1,36 @@
 from flask import *
-import mysql.connector
-import json
+import RPi.GPIO as GPIO
+
+# set gpio mode
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+# define pins to use
+TEMP_PIN = 18
+RING_PIN = 23
+
+# set up pins
+#   TEMP_PIN takes IN temperature sensor data
+#   RING_PIN sends OUT information to the LED progress ring
+GPIO.setup(TEMP_PIN, GPIO.IN)
+GPIO.setup(RING_PIN, GPIO.OUT)
 
 app = Flask(__name__)
 
-credentials = json.load(open("credentials.json", "r"))
 
-@app.route('/temp', methods=['GET'])
-def temp():
-    database = mysql.connector.connect(
-        host=credentials["host"],
-        user=credentials["user"],
-        passwd=credentials["password"],
-        database=credentials["database"]
-    )
-    cursor = database.cursor()
+# run when start button is pressed
+@app.route('/stButton', methods=['POST'])
+def cook():
+    # let us know we started cooking
+    print("Start Button Pressed")
 
-    # Your query to return records with ID 20 through 30 [inclusive]
-    # from the test_data table
-    query = "SELECT * FROM temperature_data;"
+    # start timer
+    GPIO.output(RING_PIN, HIGH)
 
-    cursor.execute(query)
-    data = cursor.fetchall()
+    # let us know the process is complete
+    return "cook process complete"
 
-    cursor.close()
-    database.close()
-    return render_template("temp_chart.html", data = data, name = 'Tim Harrold')
 
 @app.route('/', methods=['GET'])
 def default():
-    return redirect(url_for('temp'))
+    return render_template("index.html")
