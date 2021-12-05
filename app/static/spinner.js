@@ -34,7 +34,7 @@ window.cStatus = "Temp: ";
 window.currTemp = 0;
 
 // Cooking time in seconds
-var cTime = 3;
+var cTime = 60*6;
 
 // Timer, counter for data
 var counter = 0;
@@ -206,11 +206,13 @@ get_data();
 //        color: i/cTime
 //     });
 // }
-console.log(currTemp);
-if(currTemp > MAX_TEMP || currTemp < MIN_TEMP) {
-	
 
-	data.push({ length: 1/cTime, color: (counter%(1+cTime))/cTime });
+if(currTemp > MAX_TEMP || currTemp < MIN_TEMP) {
+
+
+	//cTime = 3;
+
+	data.push({ length: 250/cTime, color: (counter%(1+cTime))/cTime });
 
 	d3.selectAll("path")
 	.remove();
@@ -243,9 +245,12 @@ if(currTemp > MAX_TEMP || currTemp < MIN_TEMP) {
 
 }
 
+
+
+
 // If we've reached this part of the code, it means the temperature is ready
 
-counter = 0;
+//counter = 0;
 
 data.push({ length: 1/cTime, color: (counter%(1+cTime))/cTime });
 
