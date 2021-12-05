@@ -1,27 +1,11 @@
 
-
-function get_data() {
-	$.ajax({
-		url:"/temp",
-		type: "GET",
-		success: function(response) {
-			currTemp = parseInt(response); // Set temperature to current
-			return parseInt(response);
-		}
-
-	})
-
-
-}
-
-
 $(document).ready(function() {
 
 // What step of the cooking process are we at?
 var step = 0;
 
-//var cover = "https://cdn.dribbble.com/users/948184/screenshots/11991534/media/bb0c9bcc70dccbfd4b5dd7595f707dad.gif"
-var cover = "https://cdn.shopify.com/s/files/1/0723/6423/t/27/assets/mocha.gif?v=7428839628543292966"
+var cover = "https://cdn.dribbble.com/users/948184/screenshots/11991534/media/bb0c9bcc70dccbfd4b5dd7595f707dad.gif"
+//var cover = "https://cdn.shopify.com/s/files/1/0723/6423/t/27/assets/mocha.gif?v=7428839628543292966"
 
 
 
@@ -35,13 +19,19 @@ height=(window.innerHeight/2)-margin.top-margin.bottom,
 width=(window.innerWidth/2)-margin.left-margin.right;
 
 // Callback for timer
-var timer;
+//var timer;
+
+// Cooking Status
+window.cStatus = "";
+
+// Current cooking status
+window.cStatus = "Temp: ";
 
 // Current cooking temp
-var currTemp = 0;
+window.currTemp = 0;
 
 // Cooking time in seconds
-var cTime = 120;
+var cTime = 3;
 
 // Timer, counter for data
 var counter = 0;
@@ -86,9 +76,11 @@ var info = d3.select("#pChart")
 	.attr("class", "position-absolute");
 
 var activeImg = info.append("img")
-	.attr("class", "d-flex mx-auto w-75 mt-5")
+	.attr("class", "d-flex mx-auto w-75")
 	.attr("src", cover);
 
+
+// Pie chart for timer
 var svg = d3.select("#pChart")
     .append("svg")
     .attr("width", width)
@@ -97,6 +89,21 @@ var svg = d3.select("#pChart")
     .attr("opacity", 1)
     .append("g")
     .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")");
+
+
+var tempTxt = svg.append("text")
+.attr("font-weight", "bold")
+.attr("id", "tmp")
+.attr("dx", -(margin.left+margin.right-(Math.PI)))
+.text(cStatus);
+
+
+var timeTxt = svg.append("text")
+.attr("font-weight", "bold")
+.attr("id", "time")
+.attr("dx", -Math.PI)
+.attr("dy", 20)
+.text("Time: " + counter);
 
 function arcTween(a) {
   var i = () => d3.interpolate(this._current, a);
@@ -115,6 +122,7 @@ svg.selectAll(".arc")
   .attr("d", (d,idx) => arc(idx))
   .each(d => this._current = d.length);
 
+
 // svg.selectAll("path")
 // .data(pie(data))
 // .transition()
@@ -132,15 +140,19 @@ d3.select("#stBtn")
 	else if(step == 2) {
 		
 
+	ttl.text("Now Cooking");
+
+	subttl.text("Place the pot onto the stove and wait!");
+
 	d3.select("#pie")
  	 .transition()
  	 .duration(500)
 	 .attr("opacity", 1);
 
-
-	if(!timer) {
-  		timer = d3.interval(animate, 1000, 0);
-	}
+	//var timer = setInterval(animate, 1000);
+	animate();
+  	//var timer = d3.interval(animate, 1000, 0);
+	
 	}
 	step++;
 });
@@ -177,8 +189,9 @@ function stepTwo() {
 
 function animate() {
 
+
+
 // Repeat until timer is reached
-if(counter >= cTime) timer.stop();
 
 // General purpose code for filling in pie
 // for(var i=0; i<cTime; i++) {
@@ -189,12 +202,9 @@ if(counter >= cTime) timer.stop();
 //     });
 // }
 
-data.push({ length: 1/cTime, color: counter/cTime });
+data.push({ length: 1/cTime, color: (counter%(1+cTime))/cTime });
 
-svg.selectAll("text")
-.remove();
-
-svg.selectAll(".arc")
+svg.selectAll("path")
   .data(pie(data))
   .enter()
   .append("path")
@@ -209,25 +219,15 @@ svg.selectAll(".arc")
   .each(d => this._current = d.length);
 
 
-console.log(get_data());
+tempTxt.text(cStatus);
 
-svg.append("text")
-.attr("font-weight", "bold")
-.attr("id", "tmp")
-.attr("dx", -(margin.left+margin.right-(Math.PI)))
-.text("Temp: " + (get_data() ? get_data() : 0));
-
-svg.append("text")
-.attr("font-weight", "bold")
-.attr("id", "time")
-.attr("dx", -Math.PI)
-.attr("dy", 20)
-.text("Time: " + counter);
-
+timeTxt.text("Time: " + counter);
 
 counter++;
 
-
+if(counter <= cTime) {
+	setTimeout(animate, 1000);
+}
 
 }
 
@@ -236,4 +236,7 @@ counter++;
 
 
 });
+
+
+
 

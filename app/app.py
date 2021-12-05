@@ -18,6 +18,8 @@ RING_PIN = 23
 GPIO.setup(TEMP_PIN, GPIO.IN)
 GPIO.setup(RING_PIN, GPIO.OUT)
 
+
+
 # run when start button is pressed
 @app.route('/stBtn', methods=['POST'])
 def cook():
@@ -32,7 +34,9 @@ def cook():
 
 @app.route('/temp', methods=['GET'])
 def temp():
-    return "4";
+    tempNum = 7;
+    return str(tempNum);
+    
 
 @app.route('/', methods=['GET'])
 def default():
