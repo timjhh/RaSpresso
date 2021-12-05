@@ -7,20 +7,18 @@ function get_data() {
 			
 			var tmp = parseInt(response);
 			var resp = response;
-	
-			if(tmp > 230) {
+			
+			if(tmp > MAX_TEMP) {
 				resp = "Temp too high";
-				return "Temp too high";
-			} else if(tmp < 212) {
+			} else if(tmp < MIN_TEMP) {
 				resp = "Temp too low";
-				return "Temp too low";
 			} else {
 				resp = "Temp: " + tmp;		
 			}
 		
 			currTemp = tmp;
 			cStatus = resp;
-			
+
 			return response;
 		
 		}

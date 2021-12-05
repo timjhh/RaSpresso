@@ -18,8 +18,11 @@ var margin = {top: 20, bottom: 20, left: 30, right: 30},
 height=(window.innerHeight/2)-margin.top-margin.bottom,
 width=(window.innerWidth/2)-margin.left-margin.right;
 
-// Callback for timer
-//var timer;
+
+// Temp range
+window.MAX_TEMP = 250;
+window.MIN_TEMP = 210;
+
 
 // Cooking Status
 window.cStatus = "";
@@ -189,7 +192,9 @@ function stepTwo() {
 
 function animate() {
 
+get_data();
 
+//console.log(currTemp);
 
 // Repeat until timer is reached
 
@@ -201,6 +206,46 @@ function animate() {
 //        color: i/cTime
 //     });
 // }
+console.log(currTemp);
+if(currTemp > MAX_TEMP || currTemp < MIN_TEMP) {
+	
+
+	data.push({ length: 1/cTime, color: (counter%(1+cTime))/cTime });
+
+	d3.selectAll("path")
+	.remove();
+
+	svg.selectAll("path")
+	  .data(pie(data))
+  	.enter()
+	.append("path")
+	.attr("class", "arc")
+	.style("fill", d => d3.interpolateRdBu(1-d.data.color))
+	.attr("d", (d,idx) => arc(idx))
+  	.attr("opacity",0)
+	.transition()
+	.duration(200)
+	.ease(d3.easeLinear)
+	.attr("opacity",1)
+	.each(d => this._current = d.length);
+
+
+	tempTxt.text(cStatus);
+
+	timeTxt.text("Time: " + counter);
+
+	data = [];
+
+	counter++;
+	setTimeout(animate, 1000);
+	return;
+
+
+}
+
+// If we've reached this part of the code, it means the temperature is ready
+
+counter = 0;
 
 data.push({ length: 1/cTime, color: (counter%(1+cTime))/cTime });
 
@@ -217,7 +262,6 @@ svg.selectAll("path")
   .ease(d3.easeLinear)
   .attr("opacity",1)
   .each(d => this._current = d.length);
-
 
 tempTxt.text(cStatus);
 

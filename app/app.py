@@ -34,7 +34,7 @@ def cook():
 
 @app.route('/temp', methods=['GET'])
 def temp():
-    tempNum = 7;
+    tempNum = 220;
     return str(tempNum);
     
 
