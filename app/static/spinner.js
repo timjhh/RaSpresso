@@ -5,7 +5,8 @@ $(document).ready(function() {
 var step = 0;
 
 var cover = "https://cdn.dribbble.com/users/948184/screenshots/11991534/media/bb0c9bcc70dccbfd4b5dd7595f707dad.gif"
-//var cover = "https://cdn.shopify.com/s/files/1/0723/6423/t/27/assets/mocha.gif?v=7428839628543292966"
+
+var endpic = "https://cdn.shopify.com/s/files/1/0723/6423/t/27/assets/mocha.gif?v=7428839628543292966"
 
 
 
@@ -34,13 +35,17 @@ window.cStatus = "Temp: ";
 window.currTemp = 0;
 
 // Cooking time in seconds
-var cTime = 60*6;
+//var cTime = 60*6;
+var cTime = 5;
 
 // Timer, counter for data
 var counter = 0;
 
 // Container for each second of cooking time
 var data = [];
+
+// Pre-cooking timer
+var precook = 0;
 
 // Temperature from temperature sensor
 
@@ -59,8 +64,8 @@ var arc = d3.arc()
   .innerRadius(80)
   .outerRadius(100)
   .cornerRadius(0)
-  .startAngle(d => ((counter-1)/cTime)*cMax)
-  .endAngle(d => (((counter)/cTime)*cMax));
+  .startAngle(d => ((d-1)/cTime)*cMax)
+  .endAngle(d => (((d)/cTime)*cMax));
 
 var pie = d3.pie()
   .sort(null)
@@ -154,8 +159,11 @@ d3.select("#stBtn")
 
 	//var timer = setInterval(animate, 1000);
 	animate();
-  	//var timer = d3.interval(animate, 1000, 0);
 	
+	} else if(step == 3) {
+
+		finalStep();
+
 	}
 	step++;
 });
@@ -188,7 +196,24 @@ function stepTwo() {
 	d3.select("#stBtn").text("Start Cooking");
 
 }
+function finalStep() {
 
+
+
+	d3.select("#pie")
+	.remove();
+
+	ttl.text("Finished");
+	subttl.text("Enjoy!");
+	
+	
+	var activeImg = info.append("img")
+	.attr("class", "d-flex mx-auto w-75")
+	.attr("src", endpic);
+
+
+
+}
 
 function animate() {
 
@@ -209,42 +234,42 @@ get_data();
 
 if(currTemp > MAX_TEMP || currTemp < MIN_TEMP) {
 
+	precook++;
+	//precook = precook % cTime;
 
-	//cTime = 3;
-
-	data.push({ length: 250/cTime, color: (counter%(1+cTime))/cTime });
+	data.push({ length: 1/cTime, color: (precook%(1+cTime))/cTime });
 
 	d3.selectAll("path")
 	.remove();
 
-	svg.selectAll("path")
-	  .data(pie(data))
-  	.enter()
-	.append("path")
-	.attr("class", "arc")
-	.style("fill", d => d3.interpolateRdBu(1-d.data.color))
-	.attr("d", (d,idx) => arc(idx))
-  	.attr("opacity",0)
-	.transition()
-	.duration(200)
-	.ease(d3.easeLinear)
-	.attr("opacity",1)
-	.each(d => this._current = d.length);
+
+svg.selectAll("path")
+  .data(pie(data))
+  .enter()
+  .append("path")
+  .attr("class", "arc")
+  .style("fill", d => d3.interpolateRdBu(1-d.data.color))
+  .attr("d", (d,idx) => arc(precook))
+    .attr("opacity",0)
+  .transition()
+  .duration(200)
+  .ease(d3.easeLinear)
+  .attr("opacity",1)
+  .each(d => this._current = d.length);
 
 
 	tempTxt.text(cStatus);
 
-	timeTxt.text("Time: " + counter);
+	timeTxt.text("Time: " + precook);
 
 	data = [];
-
-	counter++;
+	
+	
 	setTimeout(animate, 1000);
 	return;
 
 
 }
-
 
 
 
@@ -276,6 +301,24 @@ counter++;
 
 if(counter <= cTime) {
 	setTimeout(animate, 1000);
+} else {
+
+
+	finalStep();
+
+	//$("#stBtn").prop("disabled", false);
+
+	//$("#stBtn").text("Next Step");
+	
+	// Display ending message	
+	//d3.select("#pie")
+	//.remove();
+
+	//ttl.text("Finished");
+	//subttl.text("Enjoy!");
+
+	//activeImg.attr("src", endpic);
+	
 }
 
 }
