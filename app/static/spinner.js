@@ -22,7 +22,7 @@ width=(window.innerWidth/2)-margin.left-margin.right;
 
 // Temp range
 window.MAX_TEMP = 250;
-window.MIN_TEMP = 210;
+window.MIN_TEMP = 71;
 
 
 // Cooking Status
@@ -35,8 +35,8 @@ window.cStatus = "Temp: ";
 window.currTemp = 0;
 
 // Cooking time in seconds
-//var cTime = 60*6;
-var cTime = 5;
+var cTime = 60*6;
+//var cTime = 5;
 
 // Timer, counter for data
 var counter = 0;
@@ -231,7 +231,7 @@ get_data();
 //        color: i/cTime
 //     });
 // }
-
+console.log(currTemp);
 if(currTemp > MAX_TEMP || currTemp < MIN_TEMP) {
 
 	precook++;

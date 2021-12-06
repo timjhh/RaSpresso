@@ -5,7 +5,7 @@ function get_data() {
 		type: "GET",
 		success: function(response) {
 			
-			var tmp = parseInt(response);
+			var tmp = parseFloat(response);
 			var resp = response;
 			
 			if(tmp > MAX_TEMP) {
@@ -15,7 +15,7 @@ function get_data() {
 			} else {
 				resp = "Temp: " + tmp;		
 			}
-		
+			console.log(tmp);	
 			currTemp = tmp;
 			cStatus = resp;
 
